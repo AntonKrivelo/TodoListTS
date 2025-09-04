@@ -1,4 +1,5 @@
 import { FilterValuesType } from '../../App';
+import './Todolist.css';
 
 export type TaskType = {
   id: number;
@@ -15,27 +16,33 @@ type PropsType = {
 
 const Todolist = (props: PropsType) => {
   return (
-    <div>
+    <div className="item">
       <h3>{props.title}</h3>
       <div>
-        <input />
-        <button>+</button>
+        <input className="todo__input" />
+        <button className="todo__added-btn">+</button>
       </div>
-      <ul>
+      <ul className="list__items">
         {props.tasks.map((task, id) => (
-          <li key={id}>
-            <input checked={task.isDone} type="checkbox"></input>
-            <span>{task.title}</span>
+          <li className="todo__item" key={id}>
+            <input className="todo__checked" checked={task.isDone} type="checkbox"></input>
+            <span className="todo__title">{task.title}</span>
             <button onClick={() => props.removeTask(task.id)} className="delete-btn">
-              X
+              x
             </button>
           </li>
         ))}
       </ul>
-      <div>
-        <button onClick={() => props.changeFilter('all')}>All</button>
-        <button onClick={() => props.changeFilter('active')}>Active</button>
-        <button onClick={() => props.changeFilter('completed')}>Completed</button>
+      <div className="change__buttons">
+        <button className="change__btn" onClick={() => props.changeFilter('all')}>
+          All
+        </button>
+        <button className="change__btn" onClick={() => props.changeFilter('active')}>
+          Active
+        </button>
+        <button className="change__btn" onClick={() => props.changeFilter('completed')}>
+          Completed
+        </button>
       </div>
     </div>
   );
