@@ -31,6 +31,11 @@
   border-radius: 5px;
 }
 
+.change__btn.active {
+  background-color: #4caf50; /* зелёная подсветка */
+  color: white;
+}
+
 .todo__item {
   display: flex;
   align-items: center; /* выравнивание по вертикали */
@@ -40,6 +45,7 @@
 .todo__title {
   flex: 1; /* занимает всё свободное место */
   margin: 0 8px; /* отступы от чекбокса и кнопки */
+  font-size: 20px;
 }
 .delete-btn {
   border: 1px solid black;

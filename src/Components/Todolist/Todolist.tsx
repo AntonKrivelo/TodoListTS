@@ -12,6 +12,7 @@ type PropsType = {
   tasks: Array<TaskType>;
   removeTask: (idRemove: number) => void;
   changeFilter: (value: FilterValuesType) => void;
+  filter: FilterValuesType;
 };
 
 const Todolist = (props: PropsType) => {
@@ -34,13 +35,22 @@ const Todolist = (props: PropsType) => {
         ))}
       </ul>
       <div className="change__buttons">
-        <button className="change__btn" onClick={() => props.changeFilter('all')}>
+        <button
+          className={`change__btn ${props.filter === 'all' ? 'active' : ''}`}
+          onClick={() => props.changeFilter('all')}
+        >
           All
         </button>
-        <button className="change__btn" onClick={() => props.changeFilter('active')}>
+        <button
+          className={`change__btn ${props.filter === 'active' ? 'active' : ''}`}
+          onClick={() => props.changeFilter('active')}
+        >
           Active
         </button>
-        <button className="change__btn" onClick={() => props.changeFilter('completed')}>
+        <button
+          className={`change__btn ${props.filter === 'completed' ? 'active' : ''}`}
+          onClick={() => props.changeFilter('completed')}
+        >
           Completed
         </button>
       </div>

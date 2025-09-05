@@ -13,6 +13,8 @@ function App() {
 
   const [filter, setFilter] = useState<FilterValuesType>('all'); // фильтрация по выполненным и не выполненным
 
+  console.log(filter);
+
   //для фильтрации
   let tasksForToDoList = tasks;
 
@@ -40,6 +42,7 @@ function App() {
         removeTask={removeTask}
         tasks={tasksForToDoList}
         title="Learning"
+        filter={filter}
       />
     </div>
   );
