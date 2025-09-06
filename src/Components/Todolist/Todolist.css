@@ -42,6 +42,10 @@
   justify-content: space-between; /* элементы по краям */
   padding: 10px 0 0 0;
 }
+.todo__item-active {
+  opacity: 0.5;
+}
+
 .todo__title {
   flex: 1; /* занимает всё свободное место */
   margin: 0 8px; /* отступы от чекбокса и кнопки */
@@ -54,4 +58,12 @@
   margin-left: 20px;
   min-width: 30px; /* чтобы у всех кнопок была одинаковая ширина */
   text-align: center; /* текст по центру */
+}
+
+.error {
+  border: red 1px solid;
+}
+
+.error-message {
+  color: red;
 }

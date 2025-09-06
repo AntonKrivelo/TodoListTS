@@ -24,6 +24,8 @@ function App() {
   }
 
   const addTask = (title: string) => {
+    // добавление таски
+
     let newTask = { id: v1(), title: title, isDone: false };
     let newTasks = [newTask, ...tasks];
     setTasks(newTasks);
@@ -40,6 +42,17 @@ function App() {
     setFilter(value);
   };
 
+  // для изменения таски выполнено или нет isDOne
+  // находим таску с таким же id (FIND())
+  const changeStatus = (taskId: string, isDone: boolean) => {
+    let task = tasks.find((t) => (t.id === taskId ? true : false));
+    if (task) {
+      task.isDone = isDone;
+    }
+
+    setTasks([...tasks]);
+  };
+
   return (
     <div className="App">
       <Todolist
@@ -49,6 +62,7 @@ function App() {
         tasks={tasksForToDoList}
         title="Learning"
         filter={filter}
+        changeStatus={changeStatus}
       />
     </div>
   );

@@ -15,28 +15,36 @@ type PropsType = {
   addTask: (title: string) => void;
   changeFilter: (value: FilterValuesType) => void;
   filter: FilterValuesType;
+  changeStatus: (taskId: string, isDone: boolean) => void;
 };
 
 const Todolist = (props: PropsType) => {
+  // для валидации инпута при отправке пустого инпута (Показа ошибки)
+  const [error, setError] = useState<string | null>(null);
+
   const [newTaskTitle, setNewTaskTitle] = useState('');
 
   const clickKeyBoardBtnAddTask = (e: KeyboardEvent) => {
     // при клике на Enter добавляется таска
     if (e.key === 'Enter') {
-      props.addTask(newTaskTitle);
-      setNewTaskTitle('');
+      addedTaskBtn();
     }
   };
 
   const addedTaskBtn = () => {
     // добавить таску при клике на кнопку
-    props.addTask(newTaskTitle);
-    setNewTaskTitle('');
+    if (newTaskTitle.trim() !== '') {
+      props.addTask(newTaskTitle);
+      setNewTaskTitle('');
+    } else {
+      setError('Title is required');
+    }
   };
 
   const onChangeTitleTask = (e: ChangeEvent<HTMLInputElement>) => {
     // берет значение из input-a
     setNewTaskTitle(e.currentTarget.value);
+    setError(null);
   };
 
   return (
@@ -47,25 +55,37 @@ const Todolist = (props: PropsType) => {
           onKeyDown={clickKeyBoardBtnAddTask}
           onChange={onChangeTitleTask}
           value={newTaskTitle}
-          className="todo__input"
+          className={error ? 'todo__input error' : 'todo__input'}
         />
+
         <button onClick={addedTaskBtn} className="todo__added-btn">
           +
         </button>
+        {error && <div className="error-message">{error}</div>}
       </div>
       <ul className="list__items">
-        {props.tasks.map((task, id) => (
-          <li className="todo__item" key={id}>
-            <input className="todo__checked" checked={task.isDone} type="checkbox"></input>
-            <span className="todo__title">{task.title}</span>
-            <button
-              onClick={(e: MouseEvent<HTMLButtonElement>) => props.removeTask(task.id)}
-              className="delete-btn"
-            >
-              x
-            </button>
-          </li>
-        ))}
+        {props.tasks.map((task, id) => {
+          const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+            props.changeStatus(task.id, e.currentTarget.checked);
+          };
+          return (
+            <li className={task.isDone ? 'todo__item todo__item-active' : 'todo__item'} key={id}>
+              <input
+                className="todo__checked"
+                checked={task.isDone}
+                onChange={changeHandler}
+                type="checkbox"
+              ></input>
+              <span className="todo__title">{task.title}</span>
+              <button
+                onClick={(e: MouseEvent<HTMLButtonElement>) => props.removeTask(task.id)}
+                className="delete-btn"
+              >
+                x
+              </button>
+            </li>
+          );
+        })}
       </ul>
       <div className="change__buttons">
         <button
