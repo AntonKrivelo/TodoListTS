@@ -9,13 +9,15 @@ export type TaskType = {
 };
 
 type PropsType = {
+  id: string;
   title: string;
   tasks: Array<TaskType>;
-  removeTask: (idRemove: string) => void;
-  addTask: (title: string) => void;
-  changeFilter: (value: FilterValuesType) => void;
+  removeTask: (idRemove: string, todoListId: string) => void;
+  addTask: (title: string, todoListId: string) => void;
+  changeFilter: (value: FilterValuesType, todoListId: string) => void;
   filter: FilterValuesType;
-  changeStatus: (taskId: string, isDone: boolean) => void;
+  changeStatus: (taskId: string, isDone: boolean, todoListId: string) => void;
+  removeTodoList: (todoListId: string) => void;
 };
 
 const Todolist = (props: PropsType) => {
@@ -34,7 +36,7 @@ const Todolist = (props: PropsType) => {
   const addedTaskBtn = () => {
     // добавить таску при клике на кнопку
     if (newTaskTitle.trim() !== '') {
-      props.addTask(newTaskTitle);
+      props.addTask(newTaskTitle, props.id);
       setNewTaskTitle('');
     } else {
       setError('Title is required');
@@ -47,9 +49,14 @@ const Todolist = (props: PropsType) => {
     setError(null);
   };
 
+  const removeTodoList = () => {
+    props.removeTodoList(props.id);
+  };
   return (
     <div className="item">
+      <button onClick={removeTodoList}>x</button>
       <h3>{props.title}</h3>
+
       <div>
         <input
           onKeyDown={clickKeyBoardBtnAddTask}
@@ -66,7 +73,7 @@ const Todolist = (props: PropsType) => {
       <ul className="list__items">
         {props.tasks.map((task, id) => {
           const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-            props.changeStatus(task.id, e.currentTarget.checked);
+            props.changeStatus(task.id, e.currentTarget.checked, props.id);
           };
           return (
             <li className={task.isDone ? 'todo__item todo__item-active' : 'todo__item'} key={id}>
@@ -78,7 +85,7 @@ const Todolist = (props: PropsType) => {
               ></input>
               <span className="todo__title">{task.title}</span>
               <button
-                onClick={(e: MouseEvent<HTMLButtonElement>) => props.removeTask(task.id)}
+                onClick={(e: MouseEvent<HTMLButtonElement>) => props.removeTask(task.id, props.id)}
                 className="delete-btn"
               >
                 x
@@ -90,19 +97,19 @@ const Todolist = (props: PropsType) => {
       <div className="change__buttons">
         <button
           className={`change__btn ${props.filter === 'all' ? 'active' : ''}`}
-          onClick={(e: MouseEvent<HTMLButtonElement>) => props.changeFilter('all')}
+          onClick={(e: MouseEvent<HTMLButtonElement>) => props.changeFilter('all', props.id)}
         >
           All
         </button>
         <button
           className={`change__btn ${props.filter === 'active' ? 'active' : ''}`}
-          onClick={(e: MouseEvent<HTMLButtonElement>) => props.changeFilter('active')}
+          onClick={(e: MouseEvent<HTMLButtonElement>) => props.changeFilter('active', props.id)}
         >
           Active
         </button>
         <button
           className={`change__btn ${props.filter === 'completed' ? 'active' : ''}`}
-          onClick={(e: MouseEvent<HTMLButtonElement>) => props.changeFilter('completed')}
+          onClick={(e: MouseEvent<HTMLButtonElement>) => props.changeFilter('completed', props.id)}
         >
           Completed
         </button>
