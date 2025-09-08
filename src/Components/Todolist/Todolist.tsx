@@ -1,5 +1,6 @@
 import { FilterValuesType } from '../../App';
-import { useState, ChangeEvent, MouseEvent, KeyboardEvent } from 'react';
+import { ChangeEvent, MouseEvent } from 'react';
+import AddFormItem from '../AddFormItem/AddFormItem';
 import './Todolist.css';
 
 export type TaskType = {
@@ -13,7 +14,7 @@ type PropsType = {
   title: string;
   tasks: Array<TaskType>;
   removeTask: (idRemove: string, todoListId: string) => void;
-  addTask: (title: string, todoListId: string) => void;
+  addItem: (title: string, todoListId: string) => void;
   changeFilter: (value: FilterValuesType, todoListId: string) => void;
   filter: FilterValuesType;
   changeStatus: (taskId: string, isDone: boolean, todoListId: string) => void;
@@ -21,55 +22,19 @@ type PropsType = {
 };
 
 const Todolist = (props: PropsType) => {
-  // для валидации инпута при отправке пустого инпута (Показа ошибки)
-  const [error, setError] = useState<string | null>(null);
-
-  const [newTaskTitle, setNewTaskTitle] = useState('');
-
-  const clickKeyBoardBtnAddTask = (e: KeyboardEvent) => {
-    // при клике на Enter добавляется таска
-    if (e.key === 'Enter') {
-      addedTaskBtn();
-    }
-  };
-
-  const addedTaskBtn = () => {
-    // добавить таску при клике на кнопку
-    if (newTaskTitle.trim() !== '') {
-      props.addTask(newTaskTitle, props.id);
-      setNewTaskTitle('');
-    } else {
-      setError('Title is required');
-    }
-  };
-
-  const onChangeTitleTask = (e: ChangeEvent<HTMLInputElement>) => {
-    // берет значение из input-a
-    setNewTaskTitle(e.currentTarget.value);
-    setError(null);
-  };
-
   const removeTodoList = () => {
     props.removeTodoList(props.id);
   };
+
+  const addTask = (title: string) => {
+    props.addItem(title, props.id);
+  };
+
   return (
     <div className="item">
       <button onClick={removeTodoList}>x</button>
       <h3>{props.title}</h3>
-
-      <div>
-        <input
-          onKeyDown={clickKeyBoardBtnAddTask}
-          onChange={onChangeTitleTask}
-          value={newTaskTitle}
-          className={error ? 'todo__input error' : 'todo__input'}
-        />
-
-        <button onClick={addedTaskBtn} className="todo__added-btn">
-          +
-        </button>
-        {error && <div className="error-message">{error}</div>}
-      </div>
+      <AddFormItem addItem={addTask} />
       <ul className="list__items">
         {props.tasks.map((task, id) => {
           const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {

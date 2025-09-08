@@ -1,7 +1,9 @@
 import { v1 } from 'uuid';
 import { useState } from 'react';
-import Todolist, { TaskType } from './Components/Todolist/Todolist';
+import Todolist from './Components/Todolist/Todolist';
 import './App.css';
+import AddFormItem from './Components/AddFormItem/AddFormItem';
+import { TaskType } from './Components/Todolist/Todolist';
 
 export type FilterValuesType = 'all' | 'completed' | 'active'; // для фильтрации при клике на кнопки
 export type TodolistType = {
@@ -10,11 +12,16 @@ export type TodolistType = {
   filter: FilterValuesType;
 };
 
+// типизация для tasksObj
+type TasksStateType = {
+  [key: string]: Array<TaskType>;
+};
+
 function App() {
   let todoListId1 = v1();
   let todoListId2 = v1();
 
-  const [tasksObj, setTasksObj] = useState({
+  const [tasksObj, setTasksObj] = useState<TasksStateType>({
     [todoListId1]: [
       { id: v1(), title: 'CSS', isDone: true },
       { id: v1(), title: 'JS', isDone: true },
@@ -26,7 +33,7 @@ function App() {
     ],
   });
 
-  const addTask = (title: string, todoListId: string) => {
+  const addItem = (title: string, todoListId: string) => {
     // добавление таски
 
     let newTask = { id: v1(), title: title, isDone: false };
@@ -69,8 +76,8 @@ function App() {
 
   // данные todolist-ов
   const [todoLists, setTodoLists] = useState<Array<TodolistType>>([
-    { id: todoListId1, title: 'what to learn', filter: 'active' },
-    { id: todoListId2, title: 'movies', filter: 'completed' },
+    { id: todoListId1, title: 'what to learn', filter: 'all' },
+    { id: todoListId2, title: 'movies', filter: 'all' },
   ]);
 
   // удаление todolist
@@ -82,8 +89,20 @@ function App() {
     setTasksObj({ ...tasksObj });
   };
 
+  //добавление todolist
+
+  const addTodoList = (title: string) => {
+    let todoList: TodolistType = { id: v1(), title: title, filter: 'all' };
+    setTodoLists([todoList, ...todoLists]);
+    setTasksObj({
+      ...tasksObj,
+      [todoList.id]: [],
+    });
+  };
+
   return (
     <div className="App">
+      <AddFormItem addItem={addTodoList} />
       {todoLists.map((tList, id) => {
         //для фильтрации
         let tasksForToDoList = tasksObj[tList.id];
@@ -93,14 +112,14 @@ function App() {
         } else if (tList.filter === 'active') {
           tasksForToDoList = tasksForToDoList.filter((task) => task.isDone === false); // показывать невыполненные таски
         }
-
+        //
         return (
           <Todolist
             removeTodoList={removeTodoList}
             key={tList.id}
             id={tList.id}
             changeFilter={changeFilter}
-            addTask={addTask}
+            addItem={addItem}
             removeTask={removeTask}
             tasks={tasksForToDoList}
             title={tList.title}
