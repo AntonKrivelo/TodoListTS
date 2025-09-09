@@ -60,6 +60,12 @@
   text-align: center; /* текст по центру */
 }
 
+.item-close {
+  border-radius: 100%;
+  border: 1px solid red;
+  padding: 1px 5px 1px 5px;
+}
+
 .error {
   border: red 1px solid;
 }

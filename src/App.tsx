@@ -74,6 +74,30 @@ function App() {
     setTasksObj({ ...tasksObj });
   };
 
+  //для изменения названия таски
+  const changeTaskTitle = (taskId: string, newTitle: string, todoListId: string) => {
+    //достанем нужный массив по todolistID
+    let tasks = tasksObj[todoListId];
+    //найдём нужную таску
+    let task = tasks.find((t) => t.id === taskId);
+    //изменим таску если она нашлась
+    if (task) {
+      task.title = newTitle;
+    }
+    // потом засетаем в стейт копию объекта и сделала перерисовку
+    setTasksObj({ ...tasksObj });
+  };
+
+  // для изменения названия тудулиста
+  const changeTodoListTitle = (newTitle: string, id: string) => {
+    // ищем нужный id
+    const todoList = todoLists.find((tList) => tList.id === id);
+    if (todoList) {
+      todoList.title = newTitle;
+      setTodoLists([...todoLists]);
+    }
+  };
+
   // данные todolist-ов
   const [todoLists, setTodoLists] = useState<Array<TodolistType>>([
     { id: todoListId1, title: 'what to learn', filter: 'all' },
@@ -125,6 +149,8 @@ function App() {
             title={tList.title}
             filter={tList.filter}
             changeStatus={changeStatus}
+            changeTaskTitle={changeTaskTitle}
+            changeTodoListTitle={changeTodoListTitle}
           />
         );
       })}
