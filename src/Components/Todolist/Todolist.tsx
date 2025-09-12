@@ -3,6 +3,10 @@ import { ChangeEvent, MouseEvent } from 'react';
 import AddFormItem from '../AddFormItem/AddFormItem';
 import './Todolist.css';
 import EditableSpan from '../EditableSpan/EditableSpan';
+import { Button, Paper } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
+import Checkbox from '@mui/material/Checkbox';
 
 export type TaskType = {
   id: string;
@@ -24,6 +28,8 @@ type PropsType = {
   changeTodoListTitle: (newTitle: string, id: string) => void;
 };
 
+const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+
 const Todolist = (props: PropsType) => {
   const removeTodoList = () => {
     props.removeTodoList(props.id);
@@ -38,63 +44,69 @@ const Todolist = (props: PropsType) => {
   };
 
   return (
-    <div className="item">
-      <button className="item-close" onClick={removeTodoList}>
-        x
-      </button>
-      <span>
-        <EditableSpan title={props.title} onChange={changeTodoListTitle} />
-      </span>
+    <Paper elevation={3} className="item">
+      <Button
+        className="item-close"
+        startIcon={<HighlightOffOutlinedIcon />}
+        onClick={removeTodoList}
+      ></Button>
+      <EditableSpan title={props.title} onChange={changeTodoListTitle} />
       <AddFormItem addItem={addTask} />
       <ul className="list__items">
         {props.tasks.map((task, id) => {
           const onChangeStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-            props.changeStatus(task.id, e.currentTarget.checked, props.id); // для изменения чекбокса
+            // для изменения чекбокса
+            props.changeStatus(task.id, e.currentTarget.checked, props.id);
           };
           const onChangeTitleHandler = (newValue: string) => {
             // для изменения названия инпута таски
             props.changeTaskTitle(task.id, newValue, props.id);
           };
+          //
+          const removeTaskItem = () => {
+            // удаление таски при клике на крестик
+            props.removeTask(task.id, props.id);
+          };
           return (
             <li className={task.isDone ? 'todo__item todo__item-active' : 'todo__item'} key={id}>
-              <input
+              <Checkbox
+                {...label}
                 className="todo__checked"
                 checked={task.isDone}
                 onChange={onChangeStatusHandler}
-                type="checkbox"
-              ></input>
+                defaultChecked
+              ></Checkbox>
               <EditableSpan title={task.title} onChange={onChangeTitleHandler} />
-              <button
-                onClick={(e: MouseEvent<HTMLButtonElement>) => props.removeTask(task.id, props.id)}
+              <Button
+                startIcon={<DeleteIcon />}
+                onClick={removeTaskItem}
                 className="delete-btn"
-              >
-                x
-              </button>
+              ></Button>
             </li>
           );
         })}
       </ul>
       <div className="change__buttons">
-        <button
+        <Button
           className={`change__btn ${props.filter === 'all' ? 'active' : ''}`}
           onClick={(e: MouseEvent<HTMLButtonElement>) => props.changeFilter('all', props.id)}
         >
           All
-        </button>
-        <button
+        </Button>
+        <Button
           className={`change__btn ${props.filter === 'active' ? 'active' : ''}`}
           onClick={(e: MouseEvent<HTMLButtonElement>) => props.changeFilter('active', props.id)}
         >
           Active
-        </button>
-        <button
+        </Button>
+        <Button
           className={`change__btn ${props.filter === 'completed' ? 'active' : ''}`}
           onClick={(e: MouseEvent<HTMLButtonElement>) => props.changeFilter('completed', props.id)}
         >
           Completed
-        </button>
+        </Button>
       </div>
-    </div>
+    </Paper>
   );
 };
 

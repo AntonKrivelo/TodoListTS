@@ -1,4 +1,6 @@
 import { useState, ChangeEvent, KeyboardEvent } from 'react';
+import { Button, TextField } from '@mui/material';
+import './AddFormItem.css';
 
 export type addItemFormPropsType = {
   addItem: (title: string) => void;
@@ -6,7 +8,6 @@ export type addItemFormPropsType = {
 
 const AddFormItem = (props: addItemFormPropsType) => {
   const [newTaskTitle, setNewTaskTitle] = useState('');
-
   // для валидации инпута при отправке пустого инпута (Показа ошибки)
   const [error, setError] = useState<string | null>(null);
 
@@ -26,7 +27,7 @@ const AddFormItem = (props: addItemFormPropsType) => {
     }
   };
 
-  const clickKeyBoardBtnAddTask = (e: KeyboardEvent) => {
+  const clickKeyBoardBtnAddTask = (e: KeyboardEvent<HTMLInputElement>) => {
     // при клике на Enter добавляется таска
     if (e.key === 'Enter') {
       addedTaskBtn();
@@ -35,16 +36,17 @@ const AddFormItem = (props: addItemFormPropsType) => {
 
   return (
     <div>
-      <input
-        onKeyDown={clickKeyBoardBtnAddTask}
+      <TextField
+        label="write a task..."
+        variant="standard"
+        onKeyUp={clickKeyBoardBtnAddTask}
         onChange={onChangeTitleTask}
         value={newTaskTitle}
         className={error ? 'todo__input error' : 'todo__input'}
       />
-
-      <button onClick={addedTaskBtn} className="todo__added-btn">
+      <Button variant="outlined" onClick={addedTaskBtn} className="added__task-btn">
         +
-      </button>
+      </Button>
       {error && <div className="error-message">{error}</div>}
     </div>
   );

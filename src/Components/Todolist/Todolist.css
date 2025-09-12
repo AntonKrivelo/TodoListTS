@@ -1,21 +1,5 @@
 .item {
-  border: 1px solid black;
   padding: 20px;
-  border-radius: 10px;
-}
-.todo__input {
-  border: 1px solid black;
-  border-radius: 5px;
-  padding: 5px;
-  margin: 10px 0 10px 0;
-}
-
-.todo__added-btn {
-  border: 1px solid black;
-  padding: 5px 10px 5px 10px;
-  border-radius: 5px;
-  margin-left: 5px;
-  font-weight: 900;
 }
 
 .change__buttons {
@@ -50,6 +34,10 @@
   flex: 1; /* занимает всё свободное место */
   margin: 0 8px; /* отступы от чекбокса и кнопки */
   font-size: 20px;
+}
+
+.Todo__title-header {
+  text-align: center;
 }
 .delete-btn {
   border: 1px solid black;
