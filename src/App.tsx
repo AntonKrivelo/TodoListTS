@@ -4,6 +4,8 @@ import Todolist from './Components/Todolist/Todolist';
 import './App.css';
 import AddFormItem from './Components/AddFormItem/AddFormItem';
 import { TaskType } from './Components/Todolist/Todolist';
+import { AppBar, Button, Container, Grid, IconButton, Toolbar, Typography } from '@mui/material';
+import { MenuBook } from '@mui/icons-material';
 
 export type FilterValuesType = 'all' | 'completed' | 'active'; // для фильтрации при клике на кнопки
 export type TodolistType = {
@@ -126,35 +128,65 @@ function App() {
 
   return (
     <div className="App">
-      <AddFormItem addItem={addTodoList} />
-      {todoLists.map((tList, id) => {
-        //для фильтрации
-        let tasksForToDoList = tasksObj[tList.id];
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
+            <MenuBook />
+          </IconButton>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Todolist App
+          </Typography>
+          <Button color="inherit">Login</Button>
+        </Toolbar>
+      </AppBar>
+      <Container fixed>
+        <Grid
+          container
+          marginTop="30px"
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <AddFormItem addItem={addTodoList} />
+        </Grid>
+        <Grid
+          container
+          spacing={3}
+          marginTop="50px"
+          direction="row"
+          alignContent="center"
+          justifyContent="center"
+        >
+          {todoLists.map((tList, id) => {
+            //для фильтрации
+            let tasksForToDoList = tasksObj[tList.id];
 
-        if (tList.filter === 'completed') {
-          tasksForToDoList = tasksForToDoList.filter((task) => task.isDone === true); // показывать выполненные таски
-        } else if (tList.filter === 'active') {
-          tasksForToDoList = tasksForToDoList.filter((task) => task.isDone === false); // показывать невыполненные таски
-        }
-        //
+            if (tList.filter === 'completed') {
+              tasksForToDoList = tasksForToDoList.filter((task) => task.isDone === true); // показывать выполненные таски
+            } else if (tList.filter === 'active') {
+              tasksForToDoList = tasksForToDoList.filter((task) => task.isDone === false); // показывать невыполненные таски
+            }
+            //
 
-        return (
-          <Todolist
-            removeTodoList={removeTodoList}
-            key={tList.id}
-            id={tList.id}
-            changeFilter={changeFilter}
-            addItem={addItem}
-            removeTask={removeTask}
-            tasks={tasksForToDoList}
-            title={tList.title}
-            filter={tList.filter}
-            changeStatus={changeStatus}
-            changeTaskTitle={changeTaskTitle}
-            changeTodoListTitle={changeTodoListTitle}
-          />
-        );
-      })}
+            return (
+              <Todolist
+                removeTodoList={removeTodoList}
+                key={tList.id}
+                id={tList.id}
+                changeFilter={changeFilter}
+                addItem={addItem}
+                removeTask={removeTask}
+                tasks={tasksForToDoList}
+                title={tList.title}
+                filter={tList.filter}
+                changeStatus={changeStatus}
+                changeTaskTitle={changeTaskTitle}
+                changeTodoListTitle={changeTodoListTitle}
+              />
+            );
+          })}
+        </Grid>
+      </Container>
     </div>
   );
 }

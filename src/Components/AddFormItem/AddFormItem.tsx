@@ -1,5 +1,7 @@
 import { useState, ChangeEvent, KeyboardEvent } from 'react';
-import { Button, TextField } from '@mui/material';
+import { Grid, IconButton, TextField } from '@mui/material';
+import { ControlPoint } from '@mui/icons-material';
+
 import './AddFormItem.css';
 
 export type addItemFormPropsType = {
@@ -23,7 +25,7 @@ const AddFormItem = (props: addItemFormPropsType) => {
       props.addItem(newTaskTitle);
       setNewTaskTitle('');
     } else {
-      setError('Title is required');
+      setError('Enter the value');
     }
   };
 
@@ -35,20 +37,27 @@ const AddFormItem = (props: addItemFormPropsType) => {
   };
 
   return (
-    <div>
+    <Grid
+      direction="row"
+      padding="0 50px 0 50px"
+      container
+      justifyContent="center"
+      alignItems="center"
+    >
       <TextField
         label="write a task..."
         variant="standard"
         onKeyUp={clickKeyBoardBtnAddTask}
         onChange={onChangeTitleTask}
         value={newTaskTitle}
-        className={error ? 'todo__input error' : 'todo__input'}
+        error={!!error} // mui ошибка
       />
-      <Button variant="outlined" onClick={addedTaskBtn} className="added__task-btn">
-        +
-      </Button>
+
+      <IconButton onClick={addedTaskBtn} className="added__task-btn">
+        <ControlPoint />
+      </IconButton>
       {error && <div className="error-message">{error}</div>}
-    </div>
+    </Grid>
   );
 };
 
